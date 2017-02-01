@@ -48,25 +48,21 @@ function strategyDefault (fn, options) {
       cacheKey = serializer(arg)
     }
 
-    if (!cache.has(cacheKey)) {
-      var computedValue = fn.call(this, arg)
-      cache.set(cacheKey, computedValue)
-      return computedValue
+    if (cache.has(cacheKey)) {
+      return cache.get(cacheKey)
     }
 
-    return cache.get(cacheKey)
+    return cache.set(cacheKey, fn.call(this, arg))
   }
 
   function variadic (fn, cache, serializer, ...args) {
     var cacheKey = serializer(args)
 
-    if (!cache.has(cacheKey)) {
-      var computedValue = fn.apply(this, args)
-      cache.set(cacheKey, computedValue)
-      return computedValue
+    if (cache.has(cacheKey)) {
+      return cache.get(cacheKey)
     }
 
-    return cache.get(cacheKey)
+    return cache.set(cacheKey, fn.apply(this, args))
   }
 
   var memoized = fn.length === 1
@@ -109,7 +105,7 @@ class ObjectWithoutPrototypeCache {
   }
 
   set (key, value) {
-    this.cache[key] = value
+    return this.cache[key] = value
   }
 
   delete (key) {
