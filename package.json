@@ -64,5 +64,7 @@
     "collectCoverage": true,
     "coverageDirectory": "./coverage/"
   },
-  "dependencies": {}
+  "dependencies": {
+    "canonicalize": "^1.0.5"
+  }
 }

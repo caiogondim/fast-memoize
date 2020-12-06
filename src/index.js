@@ -30,7 +30,7 @@ function isPrimitive (value) {
 }
 
 function monadic (fn, cache, serializer, arg) {
-  var cacheKey = isPrimitive(arg) ? arg : serializer(arg)
+  var cacheKey = isPrimitive(arg) ? arg : typeof arg == "function"? arg.toString() : serializer(arg)
 
   var computedValue = cache.get(cacheKey)
   if (typeof computedValue === 'undefined') {
@@ -103,8 +103,10 @@ function strategyMonadic (fn, options) {
 // Serializer
 //
 
+JSON.canonicalize = require("canonicalize");
+
 function serializerDefault () {
-  return JSON.stringify(arguments)
+  return JSON.canonicalize(arguments)
 }
 
 //
